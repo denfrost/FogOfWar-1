@@ -5,9 +5,9 @@
 #include "TopDown/TopDownPlayerController.h"
 #include "TopDown/TopDownUnitInterface.h"
 
-void ATopDownHUD::BeginPlay()
+void  ATopDownHUD::BeginPlay ()
 {
-	Super::BeginPlay();
+	Super::BeginPlay ();
 
 	if (GetWorld())
 	{
@@ -38,7 +38,7 @@ void ATopDownHUD::DrawHUD()
 	}
 }
 
-void ATopDownHUD::BeginDrawRect()
+void  ATopDownHUD::BeginDrawRect ()
 {
 	if (TopDownPlayerController->GetMousePosition(MouseBegin.X, MouseBegin.Y))
 	{
@@ -50,22 +50,22 @@ void ATopDownHUD::EndDrawRect()
 {
 	bDrawing = false;
 
-	// 사각형 안에 유닛이 없으면 아무것도 하지 않습니다.
+	// If there are no units in the rectangle, do nothing.
 	if (SelectedActors.Num() < 1)
 	{
 		return;
 	}
 
-	// TopDownPC가 선택 중인 유닛을 선택 해제합니다.
+	// TopDownPC deselects the unit being selected.
 	TopDownPlayerController->ClearSelectedActors();
 
-	// 사각형 안에 있는 유닛에 대해
+	// for units inside the rectangle
 	for (auto Actor : SelectedActors)
 	{
-		// TopDownPC가 소유한 유닛이면
+		// If the unit is owned by TopDownPC
 		if (TopDownPlayerController->IsOwningUnit(Actor))
 		{
-			// 그 유닛을 선택합니다.
+			// Select the unit.
 			if (Actor->GetClass()->ImplementsInterface(UTopDownUnitInterface::StaticClass()))
 			{
 				ITopDownUnitInterface::Execute_SetSelect(Actor, true);
@@ -74,20 +74,20 @@ void ATopDownHUD::EndDrawRect()
 			if (IUnit)
 			{
 				IUnit->Execute_SetSelect(IUnit, true);
-			}*/
+			} */
 		}
 	}
 
-	// TopDownPC가 선택 중인 유닛을 갱신합니다.
+	// TopDownPC updates the selected unit.
 	TopDownPlayerController->SelectedActors = SelectedActors;
 
-	// 사각형 안에 있던 유닛을 비웁니다.
+	// Empty the units inside the rectangle.
 	SelectedActors.Empty(SelectedActors.GetSlack());
 }
 
 bool ATopDownHUD::DrawRectNoFill(const FVector2D& LeftTop, const FVector2D& RightBottom, const FLinearColor& Color, float LineThickness)
 {
-	// 사각형이 너무 작으면 그리지 않습니다.
+	// If the rectangle is too small, don't draw it.
 	if (FVector2D::DistSquared(LeftTop, RightBottom) <= MinRectSize * MinRectSize)
 	{
 		return false;
