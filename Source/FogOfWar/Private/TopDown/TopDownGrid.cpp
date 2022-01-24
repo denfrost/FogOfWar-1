@@ -100,7 +100,7 @@ bool ATopDownGrid::CoordsLineTraceToMinusZAxis(const FIntPoint& Coords, ETraceTy
 	FVector GridLocation = FVector::ZeroVector;
 
 	GridLocation.X = Coords.X - GridShift;
-	GridLocation. Y = Coords. AND - GridShift;
+	GridLocation. Y = Coords.Y - GridShift;
 
 	// Grid location to world location
 	Start = GridTransform.TransformPosition(GridLocation) + TileExtent;
