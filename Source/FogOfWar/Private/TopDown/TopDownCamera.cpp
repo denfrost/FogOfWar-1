@@ -21,9 +21,9 @@ ATopDownCamera::ATopDownCamera()
 	Camera->SetupAttachment(Handle);
 }
 
-void ATopDownCamera::BeginPlay()
+void  ATopDownCamera::BeginPlay ()
 {
-	Super::BeginPlay();
+	Super::BeginPlay ();
 
 	TargetDistance = MaxDistance;
 	TargetFOV = MinFOV;
@@ -37,18 +37,18 @@ void ATopDownCamera::BeginPlay()
 }
 
 // Called to bind functionality to input
-void ATopDownCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void  ATopDownCamera :: SetupPlayerInputComponent (UInputComponent * PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	Super :: SetupPlayerInputComponent (PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATopDownCamera::OnMoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ATopDownCamera::OnMoveRight);
+	PlayerInputComponent-> BindAxis ( " MoveRight " , this , &ATopDownCamera::OnMoveRight);
 	PlayerInputComponent->BindAxis("ZoomCamera", this, &ATopDownCamera::OnZoomCamera);
 }
 
 void ATopDownCamera::OnMoveForward(float Value)
 {
-	// Yaw 값만 저장
+	// save only the yaw value
 	FRotator Rotation(0.0f, Handle->GetRelativeRotation().Yaw, 0.0f);
 
 	AddMovementInput(Rotation.Vector(), Value);
@@ -56,10 +56,10 @@ void ATopDownCamera::OnMoveForward(float Value)
 
 void ATopDownCamera::OnMoveRight(float Value)
 {
-	// Yaw 값만 저장
+	// save only the yaw value
 	FRotator Rotation(0.0f, Handle->GetRelativeRotation().Yaw, 0.0f);
 
-	// 오른쪽 방향 벡터
+	// right vector
 	const FVector& Right = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
 
 	AddMovementInput(Right, Value);
@@ -83,35 +83,35 @@ void ATopDownCamera::OnZoomCamera(float Value)
 		return FMath::FInterpTo(Current, Target, GetWorld()->GetDeltaSeconds(), InterpSpeed);
 	};
 
-	// 카메라 확대/축소 보간
+	// camera zoom interpolation
 	Handle->TargetArmLength = InterpValue(MinDistance, MaxDistance, Handle->TargetArmLength, TargetDistance);
 
-	// 카메라 이동 속도 보간
-	GetCharacterMovement()->MaxFlySpeed = InterpValue(MinSpeed, MaxSpeed, GetCharacterMovement()->MaxFlySpeed, TargetSpeed);
+	// Interpolation of camera movement speed
+	GetCharacterMovement () -> MaxFlySpeed = InterpValue (MinSpeed, MaxSpeed, GetCharacterMovement () -> MaxFlySpeed , TargetSpeed);
 
-	// 각도 저장
+	// save the angle
 	FRotator Rotation = Handle->GetRelativeRotation();
 
-	// 각도 증감량 계산
+	// Calculate the angle increase /decrease
 	float PitchStrength = (MaxPitch - MinPitch) / static_cast<float>(NumberOfZoomLevel) * AxisValue;
 
-	// 각도 제한
+	// angle limit
 	TargetPitch = FMath::Clamp(TargetPitch - PitchStrength, MinPitch, MaxPitch);
 
-	// 각도 선형보간
+	// angular linear interpolation
 	Rotation.Pitch = -FMath::FInterpTo(-Rotation.Pitch, TargetPitch, GetWorld()->GetDeltaSeconds(), InterpSpeed);
 	Handle->SetRelativeRotation(Rotation);
 
-	// FOV 저장
+	// Save FOV
 	float FOV = Camera->FieldOfView;
 
-	// FOV 증감량 계산
+	// Calculate FOV increase/decrease
 	float FOVStrength = (MaxFOV - MinFOV) / static_cast<float>(NumberOfZoomLevel) * AxisValue;
 
-	// FOV 제한
+	// FOV limit
 	TargetFOV = FMath::Clamp(TargetFOV + FOVStrength, MinFOV, MaxFOV);
 
-	// FOV 선형보간
+	// FOV linear interpolation
 	FOV = FMath::FInterpTo(FOV, TargetFOV, GetWorld()->GetDeltaSeconds(), InterpSpeed);
 	Camera->FieldOfView = FOV;
 }

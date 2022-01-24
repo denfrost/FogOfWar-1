@@ -24,10 +24,10 @@ ATopDownGrid::ATopDownGrid()
 	GridVolume->SetupAttachment(Billboard);
 	GridVolume->SetBoxExtent(FVector(GridVolumeExtentXY, GridVolumeExtentXY, GridVolumeExtentZ));
 
-	// TMap Å©±â ¿¹¾à
+	// Reserve TMap size
 	TileData.Reserve(GridResolution * GridResolution);
 
-	// ÄÝ¹é ÇÔ¼ö Á¤ÀÇ
+	// define callback function
 	IsBlocked = [&](const FIntPoint& Center, const FIntPoint& Target)
 	{
 		auto C = TileData.Find(Center);
@@ -48,9 +48,9 @@ void ATopDownGrid::OnConstruction(const FTransform& Transform)
 	UpdateGridTransform();
 }
 
-void ATopDownGrid::BeginPlay()
+void  ATopDownGrid::BeginPlay ()
 {
-	Super::BeginPlay();
+	Super::BeginPlay ();
 
 	UpdateGridTransform();
 	GenerateTileData();
@@ -74,7 +74,7 @@ void ATopDownGrid::UpdateGridTransform()
 	GridVolume->SetBoxExtent(FVector(GridVolumeExtentXY, GridVolumeExtentXY, GridVolumeExtentZ));
 
 	GridTransform.SetLocation(GridVolume->GetComponentTransform().GetLocation());
-	GridTransform.SetRotation(GridVolume->GetComponentTransform().GetRotation());
+	GridTransform. SetRotation (GridVolume-> GetComponentTransform (). GetRotation ());
 
 	float GridUnit = GridVolumeExtentXY * 2 / GridResolution;
 	GridTransform.SetScale3D({ GridUnit, GridUnit, 1});
@@ -100,30 +100,30 @@ bool ATopDownGrid::CoordsLineTraceToMinusZAxis(const FIntPoint& Coords, ETraceTy
 	FVector GridLocation = FVector::ZeroVector;
 
 	GridLocation.X = Coords.X - GridShift;
-	GridLocation.Y = Coords.Y - GridShift;
+	GridLocation. Y = Coords. AND - GridShift;
 
 	// Grid location to world location
 	Start = GridTransform.TransformPosition(GridLocation) + TileExtent;
 
 	// Grid volume's top
-	Start.Z = GridVolume->GetComponentLocation().Z + GridVolumeExtentZ;
+	Start. Z = GridVolume-> GetComponentLocation (). Z + GridVolumeExtentZ;
 
 	// Grid volume's bottom
 	End.X = Start.X;
 	End.Y = Start.Y; 
-	End.Z = GridVolume->GetComponentLocation().Z - GridVolumeExtentZ;
+	End. Z = GridVolume-> GetComponentLocation (). Z - GridVolumeExtentZ;
 
 	UKismetSystemLibrary::LineTraceSingle(GetWorld(), Start, End, TraceChannel, false, TArray<AActor*>(), EDrawDebugTrace::None, OutHit, true);
 
 	return OutHit.bBlockingHit;
 }
 
-void ATopDownGrid::GenerateTileData()
+void  ATopDownGrid :: GenerateTileData ()
 {
 	// Empty map but preserve allocation and capacity
 	TileData.Reset();
 
-	// ¶óÀÎ Æ®·¹ÀÌ½º Ãæµ¹ ÁöÁ¡À¸·Î ³ôÀÌ °ªÀ» ºÐ·ùÇÏ¸ç ±×¸®µå ¸Ê »ý¼º
+	// classify height values â€‹â€‹by line trace collision points and create grid map
 	for (int i = 0; i < GridResolution; i++)
 	{
 		for (int j = 0; j < GridResolution; j++)
@@ -173,7 +173,7 @@ void ATopDownGrid::GenerateTileData()
 	}
 }
 
-FVector ATopDownGrid::GetTileExtent() const
+FVector ATopDownGrid :: GetTileExtent () const
 {
 	return TileExtent;
 }

@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#pragma once
+# pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -46,12 +46,12 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	/** @return 월드 좌표를 그리드 좌표로 변환합니다. */
+	/* * @return Convert world coordinates to grid coordinates. */
 	UFUNCTION(Category = "Top Down Grid", BlueprintPure)
 	FIntPoint WorldToGrid(const FVector& WorldLocation) const;
 	
 	UFUNCTION(Category = "Top Down Grid", BlueprintPure)
-	FVector GetTileExtent() const;
+	FVector GetTileExtent () const ;
 
 	UFUNCTION(Category = "Top Down Grid", BlueprintPure)
 	int GetGridResolution() const;
@@ -62,14 +62,14 @@ public:
 	UFUNCTION(Category = "Top Down Grid", BlueprintPure)
 	int GetGridVolumeExtentZ() const;
 
-	/** @return 월드 단위를 그리드 단위로 변환합니다. */
-	int ToGridUnit(const int N) const;
+	/* * @return Convert world units to grid units. */
+	int  ToGridUnit ( const  int N) const ;
 
 	UPROPERTY(Category = "Top Down Grid", BlueprintReadOnly)
 	TMap<FIntPoint, FTile> TileData;
 
-	/** Center 타일과 Target 타일의 높이를 비교하는 콜백 함수 */
-	TFunction<bool(const FIntPoint&, const FIntPoint&)> IsBlocked;
+	/* * Callback function to compare the height of the Center tile and the Target tile */
+	TFunction < bool ( const FIntPoint &, const FIntPoint &)> IsBlocked;
 
 private:
 	void UpdateGridTransform();
@@ -77,8 +77,8 @@ private:
 	/** @return Returns blocking hit */
 	bool CoordsLineTraceToMinusZAxis(const FIntPoint& Coords, ETraceTypeQuery TraceChannel, FHitResult& OutHit);
 
-	/** 타일 맵 생성 */
-	void GenerateTileData();
+	/* * Create a tile map */
+	void  GenerateTileData ();
 
 	void DrawDebugGrid();
 
@@ -88,7 +88,7 @@ private:
 	UPROPERTY(Category = "Config", EditAnywhere)
 	float DebugGridTime = 10.0f;
 
-	/** 그리드 너비에 들어가는 타일 개수 & 안개 텍스처 너비의 텍셀 개수
+	/* * Number of tiles to fit into grid width & number of texels for fog texture width
 	* Tile extent = GridVolumeExtentXY / GridResoulution */
 	UPROPERTY(Category = "Config", EditAnywhere, meta = (ClampMin = 16, ClampMax = 512, UIMin = 16, UIMax = 512))
 	int GridResolution = 256;
@@ -105,12 +105,12 @@ private:
 	UPROPERTY(Category = "Top Down Grid", VisibleDefaultsOnly)
 	class UBoxComponent* GridVolume = nullptr;
 
-	/** 그리드 좌표의 트랜스폼. GridVolume을 기준으로 스케일을 조정 */
+	/* * Transform of grid coordinates. Scale based on GridVolume */
 	FTransform GridTransform;
 	
-	/** 그리드 좌표의 최솟값을 (0, 0)으로 하기 위한 조정값 */
+	/* * Adjustment value to set the minimum value of grid coordinates to (0, 0) */
 	int GridShift = GridResolution / 2;
 
-	/** 타일의 반 너비. 50이면 한 변의 길이가 100인 타일 */
+	/* * Half the width of the tile. If 50, tile with side length of 100 */
 	FVector TileExtent;
 };

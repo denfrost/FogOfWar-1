@@ -86,7 +86,7 @@ void ATopDownPlayerController::Client_InitializeTopDownPC_Implementation()
 		return;
 	}
 
-	// TeamId ¾÷µ¥ÀÌÆ®
+	// TeamId ì—…ë°ì´íŠ¸
 	TeamId = TopDownGameInst->PlayerInfo.TeamId;
 
 	TArray<AActor*> OutActors;
@@ -145,7 +145,7 @@ EEdgeLocation ATopDownPlayerController::CheckEdgeMovement()
 	{
 		GEngine->GameViewport->GetViewportSize(ViewportSize);
 
-		// ¸¶¿ì½º ÁÂÇ¥ Á¤±ÔÈ­
+		// normalize mouse coordinates
 		MouseLocation /= ViewportSize;
 
 		// Left Top
@@ -202,4 +202,4 @@ EEdgeLocation ATopDownPlayerController::CheckEdgeMovement()
 		}
 	}
 	return EEdgeLocation::None;
-}
+} 
