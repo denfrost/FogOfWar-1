@@ -109,22 +109,22 @@ void FFogTexture::UpdateFogBuffer(const FIntPoint& Center, int Radius, TFunction
 	//DrawRayCastingFog(Center, Radius, IsBlocked); // Deprecated
 
 	// Shadow casting
-	// 자신의 위치(Center)는 항상 Reveal
+	// own position (Center) is always Reveal
 	SourceBuffer[Center.Y * SourceWidth + Center.X] = 0xFF;
 
-	// 평면을 8분면으로 나눠서 계산
+	// Calculate by dividing the plane into 8 quadrants
 	for (int i = 0; i < 8; ++i)
 	{
-		DrawShadowCastingFog(Center, Radius, 1, 1.0f, 0.0f, OctantTransforms[i], IsBlocked);
+		DrawShadowCastingFog (Center, Radius, 1 , 1. 0f , 0. 0f , OctantTransforms [i], IsBlocked);
 	}
 
-	// 버퍼 해상도 업스케일
+	// upscale the buffer resolution
 	UpdateUpscaleBuffer();
 }
 
 void FFogTexture::UpdateFogTexture()
 {
-	// Texture2D를 주기적으로 업데이트하려면 아래와 같이 작성해야 함
+	// To update Texture2D periodically, you need to write
 
 	FUpdateTextureContext* UpdateTextureContext = new FUpdateTextureContext();
 	UpdateTextureContext->TextureResource = (FTexture2DResource*)FogTexture->Resource;
@@ -132,7 +132,7 @@ void FFogTexture::UpdateFogTexture()
 	UpdateTextureContext->UpdateRegion = &UpscaleUpdateRegion;
 	UpdateTextureContext->SourcePitch = UpscaleUpdateRegion.Width;
 
-	// UpscaleBuffer를 UpdateTextureContext->SourceData에 복사
+	// Copy UpscaleBuffer to UpdateTextureContext->SourceData
 	UpdateTextureContext->SourceData = new uint8[UpscaleBufferSize];
 	FMemory::Memcpy(UpdateTextureContext->SourceData, UpscaleBuffer, UpscaleBufferSize);
 
@@ -161,10 +161,10 @@ void FFogTexture::DrawRayCastingFog(const FIntPoint& Center, int Radius, TFuncti
 	int Y = Radius;
 	int D = 1 - Radius; // Discriminant
 
-	CastBresenhamLine(Center, Center + FIntPoint{  X,  Y }, IsBlocked);
-	CastBresenhamLine(Center, Center + FIntPoint{  X, -Y }, IsBlocked);
-	CastBresenhamLine(Center, Center + FIntPoint{  Y,  X }, IsBlocked);
-	CastBresenhamLine(Center, Center + FIntPoint{ -Y,  X }, IsBlocked);
+	CastBresenhamLine (Center, Center + FIntPoint {X, Y}, IsBlocked);
+	CastBresenhamLine (Center, Center + FIntPoint {X, -Y}, IsBlocked);
+	CastBresenhamLine (Center, Center + FIntPoint {Y, X}, IsBlocked);
+	CastBresenhamLine (Center, Center + FIntPoint {-Y, X}, IsBlocked);
 
 	for (X = 1; X < Y; ++X)
 	{
@@ -177,21 +177,21 @@ void FFogTexture::DrawRayCastingFog(const FIntPoint& Center, int Radius, TFuncti
 			D += 2 * X + 1 - 2 * Y;
 			--Y;
 		}
-		CastBresenhamLine(Center, Center + FIntPoint{ X,  Y }, IsBlocked);
-		CastBresenhamLine(Center, Center + FIntPoint{ -X,  Y }, IsBlocked);
-		CastBresenhamLine(Center, Center + FIntPoint{ X, -Y }, IsBlocked);
-		CastBresenhamLine(Center, Center + FIntPoint{ -X, -Y }, IsBlocked);
-		CastBresenhamLine(Center, Center + FIntPoint{ Y,  X }, IsBlocked);
-		CastBresenhamLine(Center, Center + FIntPoint{ -Y,  X }, IsBlocked);
-		CastBresenhamLine(Center, Center + FIntPoint{ Y, -X }, IsBlocked);
-		CastBresenhamLine(Center, Center + FIntPoint{ -Y, -X }, IsBlocked);
+		CastBresenhamLine (Center, Center + FIntPoint {X, Y}, IsBlocked);
+		CastBresenhamLine (Center, Center + FIntPoint {-X, Y}, IsBlocked);
+		CastBresenhamLine (Center, Center + FIntPoint {X, -Y}, IsBlocked);
+		CastBresenhamLine (Center, Center + FIntPoint {-X, -Y}, IsBlocked);
+		CastBresenhamLine (Center, Center + FIntPoint {Y, X}, IsBlocked);
+		CastBresenhamLine (Center, Center + FIntPoint {-Y, X}, IsBlocked);
+		CastBresenhamLine (Center, Center + FIntPoint {Y, -X}, IsBlocked);
+		CastBresenhamLine (Center, Center + FIntPoint {-Y, -X}, IsBlocked);
 	}
 }
 
-void FFogTexture::CastBresenhamLine(const FIntPoint& Start, const FIntPoint& End, TFunction<bool(const FIntPoint&, const FIntPoint&)> IsBlocked)
+void  FFogTexture :: CastBresenhamLine ( const FIntPoint & Start, const FIntPoint & End, TFunction < bool ( const FIntPoint &, const FIntPoint &)> IsBlocked)
 {
 	int X = Start.X;
-	int Y = Start.Y;
+	int Y = Start. and ;
 	int DeltaX = FMath::Abs(End.X - Start.X);
 	int DeltaY = FMath::Abs(End.Y - Start.Y);
 	int XIncreasement = (End.X < Start.X) ? -1 : 1;
@@ -275,13 +275,13 @@ void FFogTexture::DrawShadowCastingFog(const FIntPoint& Center, int Radius, int 
 				break;
 			}
 
-			// 시야 안에 있는 타일인지 확인
+			// Check if a tile is in view
 			if (IsInRadius(Center, { CurrentX, CurrentY }, Radius))
 			{
 				SourceBuffer[CurrentY * SourceWidth + CurrentX] = 0xFF;
 			}
 
-			// 이전 타일이 막혀있다면
+			// if the previous tile is blocked
 			if (bBlocked)
 			{
 				if (IsBlocked(Center, { CurrentX, CurrentY }))
@@ -291,7 +291,7 @@ void FFogTexture::DrawShadowCastingFog(const FIntPoint& Center, int Radius, int 
 				}
 				else
 				{
-					bBlocked = false;
+					bBlocked = false ;
 					Start = NewStart;
 				}
 			}
@@ -322,10 +322,10 @@ void FFogTexture::UpdateUpscaleBuffer()
 	{
 		for (int j = 0; j < SourceHeight; ++j)
 		{
-			// 2x2 텍셀을 가져와서
+			// get the 2x2 texel
 			Texel2X2 = GetTexel2X2(i, j); 
 
-			// 4x4 텍셀에 맵핑
+			// map to 4x4 texels
 			Texel4X4 = UpscaleMap.Find(Texel2X2); 
 			if (Texel4X4 == nullptr)
 			{
@@ -339,7 +339,7 @@ void FFogTexture::UpdateUpscaleBuffer()
 		}
 	}
 
-	// 한 번이라도 탐사한 타일이 있는지 확인
+	// Check if there is a tile that has been explored at least once
 	for (uint32 i = 0; i < UpscaleBufferSize; ++i)
 	{
 		if (ExploredBuffer[i] == ExploredFogColor && UpscaleBuffer[i] == 0)
@@ -374,34 +374,34 @@ void FFogTexture::GenerateUpscaleMap()
 	UpscaleMap.Reserve(16);
 
 	UpscaleMap.Emplace(FTexel2X2{ 0, 0, 0, 0 }, FTexel4X4{ { { 0, 0, 0, 0 },
-															 { 0, 0, 0, 0 },
-															 { 0, 0, 0, 0 },
-															 { 0, 0, 0, 0 } } });
+															 { 0 , 0 , 0 , 0 },
+															 { 0 , 0 , 0 , 0 },
+															 { 0 , 0 , 0 , 0 } } });
 
 	UpscaleMap.Emplace(FTexel2X2{ 0xFF, 0, 0, 0 }, FTexel4X4{ { { 0xFF, 0x80, 0,    0	 },
 																{ 0x80, 0,	  0,    0	 },
-																{ 0,	0,	  0,    0	 },
-																{ 0,	0,	  0,    0	 } } });
+																{ 0 ,	 0 ,	   0 ,     0 	 },
+																{ 0 ,	 0 ,	   0 ,     0 	 } } });
 
 	UpscaleMap.Emplace(FTexel2X2{ 0, 0xFF, 0, 0 }, FTexel4X4{ { { 0,    0,    0x80, 0xFF },
 																{ 0,    0,    0,	0x80 },
-																{ 0,    0,    0,	0	 },
-																{ 0,    0,    0,	0	 } } });
+																{ 0 ,     0 ,     0 ,	 0 	 },
+																{ 0 ,     0 ,     0 ,	 0 	 } } });
 
 	UpscaleMap.Emplace(FTexel2X2{ 0, 0, 0xFF, 0 }, FTexel4X4{ { { 0,	0,	  0,    0    },
-																{ 0,	0,	  0,    0    },
+																{ 0 ,	 0 ,	   0 ,     0     },
 																{ 0x80, 0,	  0,    0    },
 																{ 0xFF, 0x80, 0,    0    } } });
 
 	UpscaleMap.Emplace(FTexel2X2{ 0, 0, 0, 0xFF }, FTexel4X4{ { { 0,    0,    0,    0    },
-															    { 0,    0,    0,    0    },
+															    { 0 ,     0 ,     0 ,     0     },
 															    { 0,    0,    0,    0x80 },
 															    { 0,    0,    0x80, 0xFF } } });
 
 	UpscaleMap.Emplace(FTexel2X2{ 0xFF, 0xFF, 0, 0 }, FTexel4X4{ { { 0xFF, 0xFF, 0xFF, 0xFF },
 																   { 0xFF, 0xFF, 0xFF, 0xFF },
-																   { 0,    0,	 0,	   0	},
-																   { 0,    0,	 0,	   0	} } });
+																   { 0 ,     0 ,	  0 ,	    0 	},
+																   { 0 ,     0 ,	  0 ,	    0 	} } });
 
 	UpscaleMap.Emplace(FTexel2X2{ 0xFF, 0, 0xFF, 0 }, FTexel4X4{ { { 0xFF, 0xFF, 0, 0 },
 																   { 0xFF, 0xFF, 0, 0 },
@@ -424,7 +424,7 @@ void FFogTexture::GenerateUpscaleMap()
 																   { 0,	   0,	 0xFF, 0xFF } } });
 
 	UpscaleMap.Emplace(FTexel2X2{ 0, 0, 0xFF, 0xFF }, FTexel4X4{ { { 0,	   0,	 0,	   0    },
-																   { 0,	   0,	 0,	   0    },
+																   { 0 ,	    0 ,	  0 ,	    0     },
 																   { 0xFF, 0xFF, 0xFF, 0xFF },
 																   { 0xFF, 0xFF, 0xFF, 0xFF } } });
 
