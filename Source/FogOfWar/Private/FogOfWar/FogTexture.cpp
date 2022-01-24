@@ -115,7 +115,7 @@ void FFogTexture::UpdateFogBuffer(const FIntPoint& Center, int Radius, TFunction
 	// Calculate by dividing the plane into 8 quadrants
 	for (int i = 0; i < 8; ++i)
 	{
-		DrawShadowCastingFog (Center, Radius, 1 , 1. 0f , 0. 0f , OctantTransforms [i], IsBlocked);
+		DrawShadowCastingFog (Center, Radius, 1 , 1.0f , 0.0f , OctantTransforms [i], IsBlocked);
 	}
 
 	// upscale the buffer resolution
@@ -191,7 +191,7 @@ void FFogTexture::DrawRayCastingFog(const FIntPoint& Center, int Radius, TFuncti
 void  FFogTexture :: CastBresenhamLine ( const FIntPoint & Start, const FIntPoint & End, TFunction < bool ( const FIntPoint &, const FIntPoint &)> IsBlocked)
 {
 	int X = Start.X;
-	int Y = Start. and ;
+	int Y = Start.Y;
 	int DeltaX = FMath::Abs(End.X - Start.X);
 	int DeltaY = FMath::Abs(End.Y - Start.Y);
 	int XIncreasement = (End.X < Start.X) ? -1 : 1;
