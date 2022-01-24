@@ -9,14 +9,14 @@
 
 #include "Kismet/GameplayStatics.h"
 
-AFogManager::AFogManager()
+AFogManager :: AFogManager ()
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AFogManager::BeginPlay()
+void  AFogManager::BeginPlay ()
 {
-	Super::BeginPlay();
+	Super::BeginPlay ();
 
 	if (GetWorld() == nullptr)
 	{
@@ -25,7 +25,7 @@ void AFogManager::BeginPlay()
 
 	// Get TopDownGrid
 	TArray<AActor*> OutActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATopDownGrid::StaticClass(), OutActors);
+	UGameplayStatics::GetAllActorsOfClass ( GetWorld (), ATopDownGrid::StaticClass (), OutActors);
 	if (OutActors.Num() == 1)
 	{
 		TopDownGrid = Cast<ATopDownGrid>(OutActors[0]);
@@ -39,7 +39,7 @@ void AFogManager::BeginPlay()
 	}
 
 	// Get grid resoultion
-	GridResolution = TopDownGrid->GetGridResolution();
+	GridResolution = TopDownGrid-> GetGridResolution ();
 
 	// Initialize FogTexture class
 	FogTexture = new FFogTexture();
@@ -65,16 +65,16 @@ void AFogManager::UpdateFog()
 		return;
 	}
 
-	// 안개 텍스처 업데이트
+	// update the fog texture
 	UpdateFogTexture();
 
-	// 안개에 따른 유닛 가시성 업데이트
+	// update unit visibility according to fog
 	Client_UpdateUnitVisibility();
 }
 
 void AFogManager::UpdateFogTexture()
 {
-	// 한 번이라도 탐사한 타일이 있는지 업데이트
+	// Update if there are tiles that have been explored at least once
 	FogTexture->UpdateExploredFog();
 	
 	// Get TopDownPC
@@ -85,23 +85,23 @@ void AFogManager::UpdateFogTexture()
 		return;
 	}
 
-	// TopDownPC가 소유한 유닛들만 시야 계산
+	// Calculate visibility only for units owned by TopDownPC
 	for (auto Unit : TopDownPC->OwningUnits)
 	{
 		if (Unit == nullptr)
 		{
 			continue;
 		}
-		// 유닛의 위치를 그리드 좌표로 변환
+		// Transform the unit's position into grid coordinates
 		const FIntPoint& UnitCoords = TopDownGrid->WorldToGrid(Unit->GetActorLocation());
 
 		// Get unit sight
 		const int UnitSight = TopDownGrid->ToGridUnit(Unit->GetSight());
 
-		// 유닛을 기준으로 안개 텍스처 버퍼 업데이트
-		FogTexture->UpdateFogBuffer(UnitCoords, UnitSight, TopDownGrid->IsBlocked);
+		// Update the fog texture buffer on a per-unit basis
+		FogTexture-> UpdateFogBuffer (UnitCoords, UnitSight, TopDownGrid-> IsBlocked );
 	}
-	// 버퍼로 텍스처 업데이트
+	// update texture with buffer
 	FogTexture->UpdateFogTexture();
 }
 
@@ -115,10 +115,10 @@ void AFogManager::Client_UpdateUnitVisibility_Implementation()
 		return;
 	}
 	
-	// TopDownPC가 소유하지 않은 유닛 중에서
+	// Among units not owned by TopDownPC
 	for (auto Unit : TopDownPC->OtherUnits)
 	{
-		// 그 유닛이 있는 곳의 안개 상태를 확인하고 유닛의 가시성을 결정합니다.
+		// Check the fog conditions where the unit is and determine the unit's visibility.
 		auto Coords = TopDownGrid->WorldToGrid(Unit->GetActorLocation());
 		if (FogTexture->IsRevealed(Coords))
 		{
