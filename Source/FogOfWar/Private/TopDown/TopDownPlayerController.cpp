@@ -145,7 +145,7 @@ EEdgeLocation ATopDownPlayerController::CheckEdgeMovement()
 	{
 		GEngine->GameViewport->GetViewportSize(ViewportSize);
 
-		// 마우스 좌표 정규화
+		// normalize mouse coordinates
 		MouseLocation /= ViewportSize;
 
 		// Left Top
