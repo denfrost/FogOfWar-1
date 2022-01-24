@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#pragma once
+# pragma once
 
 #include "CoreMinimal.h"
 #include "Rendering/Texture2DResource.h"
@@ -13,7 +13,7 @@ struct FTexel2X2
 	}
 	uint8 T[4];
 };
-uint32 GetTypeHash(const FTexel2X2& Texel); // TMap을 사용하기 위한 커스텀 해시 함수
+uint32 GetTypeHash ( const FTexel2X2& Texel); // custom hash function to use TMap
 
 struct FTexel4X4
 {
@@ -51,60 +51,60 @@ public:
 
 	void UpdateFogBuffer(const FIntPoint& Center, int Radius, TFunction<bool(const FIntPoint&, const FIntPoint&)> IsBlocked);
 
-	void UpdateFogTexture();
+	void  UpdateFogTexture ();
 
-	/** @return 타일이 Revealed 상태인지 알려줍니다. */
+	/* * @return Tells if the tile is in Revealed state. */
 	UFUNCTION(Category = "Fog Texture", BlueprintPure)
-	bool IsRevealed(const FIntPoint& Coords) const;
+	bool  IsRevealed ( const FIntPoint & Coords) const ;
 
-	/** 업스케일 버퍼로 만든 Texture2D */
+	/* * Texture2D created with upscale buffer */
 	UPROPERTY(Category = "Fog Texture", BlueprintReadOnly, Transient)
 	class UTexture2D* FogTexture = nullptr;
 
 private:
-	/** https://technology.riotgames.com/news/story-fog-and-war */
+	/* * https://technology.riotgames.com/news/story-fog-and-war */
 	void GenerateUpscaleMap();
 	void UpdateUpscaleBuffer();
 
-	// Ray casting: 중심에서 원 둘레에 해당하는 타일까지 직선을 그려 장애물을 검사하는 방식
-	/** 브레젠험 원 알고리즘으로 원 둘레에 해당하는 타일을 구하는 함수
+	// Ray casting: A method of inspecting obstacles by drawing a straight line from the center to the tile corresponding to the circumference of the circle.
+	/* * Function to find the tile corresponding to the circumference of a circle using the Bresenham circle algorithm
 	* https://en.wikipedia.org/wiki/Midpoint_circle_algorithm */
 	void DrawRayCastingFog(const FIntPoint& Center, int Radius, TFunction<bool(const FIntPoint&, const FIntPoint&)> IsBlocked);
-	/** 브레젠험 선 알고리즘으로 직선상의 장애물 검사
+	/* * Check for obstacles in a straight line with the Bresenham line algorithm
 	* https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm */
-	void CastBresenhamLine(const FIntPoint& Start, const FIntPoint& End, TFunction<bool(const FIntPoint&, const FIntPoint&)> IsBlocked);
+	void  CastBresenhamLine ( const FIntPoint & Start, const FIntPoint & End, TFunction < bool ( const FIntPoint &, const FIntPoint &)> IsBlocked);
 
 	// Shadow casting
-	/** http://roguebasin.com/index.php/Shadow_casting */
+	/* * http://roguebasin.com/index.php/Shadow_casting */
 	void DrawShadowCastingFog(const FIntPoint& Center, int Radius, int Row, float Start, float End, const FOctantTransform& T, TFunction<bool(const FIntPoint&, const FIntPoint&)> IsBlocked);
 
-	/** Target이 Center를 중심으로 하는 원 안에 있는지 확인합니다. */
+	/* * Make sure the Target is in a circle centered on the Center. */
 	bool IsInRadius(const FIntPoint& Center, const FIntPoint& Target, int Radius) const;
 
-	/** (X,Y), (X+1,Y), (X,Y+1), (X+1,Y+1) 텍셀을 가져옵니다. */
+	/* * Get (X,Y), (X+1,Y), (X,Y+1), (X+1,Y+1) texels. */
 	FTexel2X2 GetTexel2X2(int X, int Y);
 
-	/** 타일맵과 연동하여 안개 상태를 업데이트하는 버퍼입니다. */
+	/* * Buffer to update the fog state in conjunction with the tilemap. */
 	uint8* SourceBuffer = nullptr;
 	uint32 SourceBufferSize = 0;
 	int SourceWidth = 0;
 	int SourceHeight = 0;
 
-	/** SourceBuffer를 4배 확대한 버퍼입니다. */
+	/* * This is a 4x magnification of the SourceBuffer. */
 	uint8* UpscaleBuffer = nullptr;
 	uint32 UpscaleBufferSize = 0;
 	int UpscaleWidth = 0;
 	int UpscaleHeight = 0;
 	FUpdateTextureRegion2D UpscaleUpdateRegion;
 
-	/** 탐사했던 타일을 회색으로 만드는데 사용합니다. */
+	/* * Used to make the explored tile gray. */
 	uint8* ExploredBuffer = nullptr;
 
-	/** 모든 8분면에 섀도 캐스팅 알고리즘을 적용하기 위한 변환 구조체입니다. */
-	UPROPERTY()
-	TArray<FOctantTransform> OctantTransforms;
+	/* * Transform structure to apply the shadow casting algorithm to all quadrants. */
+	UPROPERTY ()
+	TArray <FOctantTransform> OctantTransforms;
 
-	/** 2X2 텍셀을 4X4 텍셀로 어떻게 맵핑할지 저장해 놓은 템플릿입니다. */
-	UPROPERTY()
+	/* * This is a template that stores how to map 2X2 texels to 4X4 texels. */
+	UPROPERTY ()
 	TMap<FTexel2X2, FTexel4X4> UpscaleMap;
 };
