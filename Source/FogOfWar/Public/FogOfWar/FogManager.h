@@ -9,7 +9,7 @@
 
 class FFogTexture;
 
-UCLASS ()
+UCLASS()
 class FOGOFWAR_API AFogManager : public AActor
 {
 	GENERATED_BODY()
