@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#pragma once
+# pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -9,13 +9,13 @@
 
 class FFogTexture;
 
-UCLASS()
+UCLASS ()
 class FOGOFWAR_API AFogManager : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	AFogManager();
+	AFogManager ();
 
 protected:
 	virtual void BeginPlay() override;
@@ -26,8 +26,8 @@ public:
 	UTexture2D* GetFogTexture() const;
 
 protected:
-	void UpdateFog();
-	void UpdateFogTexture();
+	void  UpdateFog ();
+	void  UpdateFogTexture ();
 
 	UFUNCTION(Client, Reliable)
 	void Client_UpdateUnitVisibility();
@@ -46,7 +46,7 @@ protected:
 	UPROPERTY(Category = "Config", EditAnywhere, BlueprintReadOnly, meta = (ClampMin = "0.001", ClampMax = "0.05", UIMin = "0.001", UIMax = "0.05"))
 	float FogBlurDistance = 0.02f;
 
-	/** 그리드의 각 축에 있는 타일 개수 & 안개 텍스처 해상도 */
+	/* * Number of tiles on each axis of the grid & Fog texture resolution */
 	uint32 GridResolution = 0;
 
 	FTimerHandle FogUpdateTimer;
