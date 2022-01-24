@@ -16,7 +16,7 @@ FGenericTeamId ATopDownUnit::GetGenericTeamId() const
 	return (FGenericTeamId)TeamId;
 }
 
-bool ATopDownUnit::IsFriendly_Implementation() const
+bool  ATopDownUnit :: IsFriendly_Implementation () const
 {
 	// Get TopDownPC
 	auto TopDownPC = GetWorld()->GetFirstPlayerController<ATopDownPlayerController>();
@@ -26,7 +26,7 @@ bool ATopDownUnit::IsFriendly_Implementation() const
 		return false;
 	}
 
-	// TopDownPC와 TeamId가 같으면 아군입니다.
+	// If TopDownPC and TeamId are the same, they are friendly.
 	return TopDownPC->TeamId == TeamId;
 }
 
@@ -40,11 +40,11 @@ bool ATopDownUnit::IsHostile_Implementation() const
 		return true;
 	}
 
-	// TopDownPC와 TeamId가 다르면 적군입니다.
+	// If TopDownPC and TeamId are different, then it is enemy.
 	return TopDownPC->TeamId != TeamId;
 }
 
-void ATopDownUnit::SetUnitVisibility(bool NewVisible)
+void  ATopDownUnit::SetUnitVisibility ( bool NewVisible)
 {
 	GetMesh()->SetVisibility(NewVisible, true);
 }
