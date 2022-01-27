@@ -31,8 +31,8 @@ protected:
 	UPROPERTY(Category = "Top Down Camera", EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "200.0", ClampMax = "2000.0", UIMin = "200.0", UIMax = "2000.0"))
 	float MinDistance = 1000.0f;
 
-	UPROPERTY(Category = "Top Down Camera", EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "2000.0", ClampMax = "5000.0", UIMin = "2000.0", UIMax = "5000.0"))
-	float MaxDistance = 2800.0f;
+	UPROPERTY(Category = "Top Down Camera", EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "2000.0", ClampMax = "50000.0", UIMin = "2000.0", UIMax = "50000.0"))
+	float MaxDistance = 7000.0f;
 
 	UPROPERTY(Category = "Top Down Camera", EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "30.0", ClampMax = "55.0", UIMin = "30.0", UIMax = "55.0"))
 	float MinFOV = 45.0;

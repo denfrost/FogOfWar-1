@@ -90,8 +90,8 @@ private:
 
 	/* * Number of tiles to fit into grid width & number of texels for fog texture width
 	* Tile extent = GridVolumeExtentXY / GridResoulution */
-	UPROPERTY(Category = "Config", EditAnywhere, meta = (ClampMin = 16, ClampMax = 512, UIMin = 16, UIMax = 512))
-	int GridResolution = 256;
+	UPROPERTY(Category = "Config", EditAnywhere, meta = (ClampMin = 64, ClampMax = 2048, UIMin = 64, UIMax = 2048)) //!!!  amount tiles 
+	int GridResolution = 512;
 
 	UPROPERTY(Category = "Config", EditAnywhere)
 	int GridVolumeExtentXY = 4096;

@@ -97,7 +97,7 @@ void AFogManager::UpdateFogTexture()
 
 		// Get unit sight
 		const int UnitSight = TopDownGrid->ToGridUnit(Unit->GetSight());
-
+		//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::Printf(TEXT("Sight: %d, Coords: %s"), UnitSight, *UnitCoords.ToString()));
 		// Update the fog texture buffer on a per-unit basis
 		FogTexture-> UpdateFogBuffer (UnitCoords, UnitSight, TopDownGrid-> IsBlocked );
 	}

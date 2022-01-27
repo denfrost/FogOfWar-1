@@ -155,7 +155,7 @@ void FFogTexture::DrawRayCastingFog(const FIntPoint& Center, int Radius, TFuncti
 	{
 		return;
 	}
-
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::Printf(TEXT("DrawRayCastingFog %d"),Radius));
 	// Get bresenham circle
 	int X = 0;
 	int Y = Radius;
@@ -251,7 +251,7 @@ void FFogTexture::DrawShadowCastingFog(const FIntPoint& Center, int Radius, int 
 	{
 		return;
 	}
-
+	//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Green, FString::Printf(TEXT("Radius %d"), Radius));
 	float NewStart = 0.0f;
 	bool bBlocked = false;
 
