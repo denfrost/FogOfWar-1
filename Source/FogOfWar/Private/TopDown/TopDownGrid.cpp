@@ -68,13 +68,13 @@ int ATopDownGrid::ToGridUnit(const int N) const
 
 void ATopDownGrid::UpdateGridTransform()
 {
-	GridResolution = FMath::Clamp<int>(FMath::RoundUpToPowerOfTwo(GridResolution), 16, 512);
+	//GridResolution = FMath::Clamp<int>(FMath::RoundUpToPowerOfTwo(GridResolution), 16, 1024);
 	GridShift = GridResolution / 2;
 
 	GridVolume->SetBoxExtent(FVector(GridVolumeExtentXY, GridVolumeExtentXY, GridVolumeExtentZ));
 
 	GridTransform.SetLocation(GridVolume->GetComponentTransform().GetLocation());
-	GridTransform. SetRotation (GridVolume-> GetComponentTransform (). GetRotation ());
+	GridTransform.SetRotation(GridVolume->GetComponentTransform().GetRotation());
 
 	float GridUnit = GridVolumeExtentXY * 2 / GridResolution;
 	GridTransform.SetScale3D({ GridUnit, GridUnit, 1});
